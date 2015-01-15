@@ -814,7 +814,17 @@
 
     =================================================================================================================== -->
 
-  <Target Name="Clean">
+  <PropertyGroup>
+    <CleanDependsOn>
+      BeforeClean;
+      CoreClean;
+      AfterClean
+    </CleanDependsOn>
+  </PropertyGroup>
+
+  <Target Name="BeforeClean" />
+  
+  <Target Name="CoreClean">
 
     <!-- We should also clear our references.
 
@@ -834,15 +844,45 @@
       <_ToBeDeleted Include="$(NuGetSymbolsOutputPath)" />
     </ItemGroup>
     <Delete Files="@(_ToBeDeleted)" />
-
   </Target>
 
-  <Target Name="Build" DependsOnTargets="CreatePackage">
+  <Target Name="AfterClean" />
+
+  <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)" />
+
+
+  <PropertyGroup>
+    <BuildDependsOn>
+      BeforeBuild;
+      CoreBuild;
+      AfterBuild
+    </BuildDependsOn>
+  </PropertyGroup>
+
+  <Target Name="BeforeBuild" />
+  
+  <Target Name="CoreBuild" DependsOnTargets="CreatePackage">
     <Message Text="$(MSBuildProjectName) -> $(NuGetOutputPath)"
              Importance="high" />
   </Target>
+  
+  <Target Name="AfterBuild" />
 
-  <Target Name="Rebuild" DependsOnTargets="Clean;Build" />
+  <Target Name="Build" DependsOnTargets="$(BuildDependsOn)"/>
+
+
+  <PropertyGroup>
+    <RebuildDependsOn>
+      BeforeRebuild;
+      CoreRebuild;
+      AfterRebuild;
+    </RebuildDependsOn>
+  </PropertyGroup>
+
+  <Target Name="BeforeRebuild" />
+  <Target Name="CoreRebuild" DependsOnTargets="Clean;Build" />
+  <Target Name="AfterRebuild" />
+  <Target Name="Rebuild" DependsOnTargets="$(RebuildDependsOn)"/>
 
   <Import Project="$(CustomAfterNuProjTargets)" Condition="'$(CustomAfterNuProjTargets)' != '' and Exists('$(CustomAfterNuProjTargets)')"/>
 
