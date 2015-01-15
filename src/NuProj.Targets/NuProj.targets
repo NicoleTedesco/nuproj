@@ -821,9 +821,7 @@
       AfterClean
     </CleanDependsOn>
   </PropertyGroup>
-
   <Target Name="BeforeClean" />
-  
   <Target Name="CoreClean">
 
     <!-- We should also clear our references.
@@ -845,31 +843,23 @@
     </ItemGroup>
     <Delete Files="@(_ToBeDeleted)" />
   </Target>
-
   <Target Name="AfterClean" />
-
   <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)" />
 
-
-  <PropertyGroup>
+ <PropertyGroup>
     <BuildDependsOn>
       BeforeBuild;
       CoreBuild;
       AfterBuild
     </BuildDependsOn>
   </PropertyGroup>
-
   <Target Name="BeforeBuild" />
-  
   <Target Name="CoreBuild" DependsOnTargets="CreatePackage">
     <Message Text="$(MSBuildProjectName) -> $(NuGetOutputPath)"
              Importance="high" />
   </Target>
-  
   <Target Name="AfterBuild" />
-
   <Target Name="Build" DependsOnTargets="$(BuildDependsOn)"/>
-
 
   <PropertyGroup>
     <RebuildDependsOn>
@@ -878,7 +868,6 @@
       AfterRebuild;
     </RebuildDependsOn>
   </PropertyGroup>
-
   <Target Name="BeforeRebuild" />
   <Target Name="CoreRebuild" DependsOnTargets="Clean;Build" />
   <Target Name="AfterRebuild" />
